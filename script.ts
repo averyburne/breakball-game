@@ -1,4 +1,6 @@
 export {}
+import blocksArray from './blocks.ts'
+console.log(blocksArray)
 
 let gameBoard: any = document.getElementById("game-canvas")
 const gameBoardContext = gameBoard.getContext('2d')
