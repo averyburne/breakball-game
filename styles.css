@@ -1,0 +1,26 @@
+body {
+
+}
+
+#top-container {
+    border: 1px solid black;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+}
+
+.container {
+    width: 100%;
+    /* border: 1px solid red; */
+    display: flex;
+    justify-content: center;
+}
+
+#game-canvas {
+    border: 1px solid black;
+}
+
+/* .game-paddle {
+    border: 1px solid black;
+    background-color: lightblue;
+} */
