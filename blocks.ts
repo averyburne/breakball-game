@@ -13,3 +13,5 @@ let blocksArray: Block[] = [
     height: 10,
     color: 'red'}
 ]
+
+export {blocksArray}
