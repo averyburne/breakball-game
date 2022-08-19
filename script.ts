@@ -1,6 +1,6 @@
 export {}
-import blocksArray from './blocks.ts'
-console.log(blocksArray)
+// import { blocksArray } from './blocks.ts'
+// console.log(blocksArray)
 
 let gameBoard: any = document.getElementById("game-canvas")
 const gameBoardContext = gameBoard.getContext('2d')
@@ -11,13 +11,23 @@ let playerBlock
 let computerBlock
 // gameBoard.width = '10%'
 
-let rightBlock: {
+type Paddle = {
     x: number,
     y: number,
     width: number,
     height: number,
     incoming: boolean
-} = {
+}
+
+type Ball = {
+    x: number,
+    y: number,
+    radius: number,
+    dy: number,
+    dx: number
+}
+
+let rightBlock: Paddle = {
     x: 350,
     y: 450,
     width: 100,
@@ -25,13 +35,7 @@ let rightBlock: {
     incoming: true
 }
 
-let gameBall: {
-    x: number,
-    y: number,
-    radius: number,
-    dy: number,
-    dx: number
-} = {
+let gameBall: Ball = {
     x: 250,
     y: 100,
     radius: 10,

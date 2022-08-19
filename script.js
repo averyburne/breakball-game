@@ -1,5 +1,7 @@
 "use strict";
 exports.__esModule = true;
+// import { blocksArray } from './blocks.ts'
+// console.log(blocksArray)
 var gameBoard = document.getElementById("game-canvas");
 var gameBoardContext = gameBoard.getContext('2d');
 var boardBackground = 'white';
@@ -7,7 +9,6 @@ var boardBorder = 'black';
 var isDragging = false;
 var playerBlock;
 var computerBlock;
-// gameBoard.width = '10%'
 var rightBlock = {
     x: 350,
     y: 450,
