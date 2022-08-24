@@ -8,13 +8,18 @@ var boardBackground = 'white';
 var boardBorder = 'black';
 var isDragging = false;
 var playerBlock;
-var computerBlock;
-var rightBlock = {
+var gamePaddle = {
     x: 350,
     y: 450,
     width: 100,
     height: 20,
     incoming: true
+};
+var reset = function (ball) {
+    ball.x = 250;
+    ball.y = 100;
+    ball.dy = 10;
+    ball.dx = 0;
 };
 var gameBall = {
     x: 250,
@@ -35,11 +40,6 @@ function main() {
     setTimeout(function () {
         clearCanvas();
         checkIfBounced();
-        if (checkIfScored()) {
-            setTimeout(function () {
-                draw();
-            }, 3000);
-        }
         gameBall.x += gameBall.dx;
         gameBall.y += gameBall.dy;
         draw();
@@ -58,23 +58,41 @@ var clearCanvas = function () {
 var draw = function () {
     gameBoardContext.fillStyle = 'lightblue';
     gameBoardContext.strokeStyle = 'darkblue';
-    gameBoardContext.fillRect(rightBlock.x, rightBlock.y, rightBlock.width, rightBlock.height);
-    gameBoardContext.strokeRect(rightBlock.x, rightBlock.y, rightBlock.width, rightBlock.height);
+    gameBoardContext.fillRect(gamePaddle.x, gamePaddle.y, gamePaddle.width, gamePaddle.height);
+    gameBoardContext.strokeRect(gamePaddle.x, gamePaddle.y, gamePaddle.width, gamePaddle.height);
     gameBoardContext.beginPath();
     gameBoardContext.arc(gameBall.x, gameBall.y, gameBall.radius, 0, 2 * Math.PI);
     gameBoardContext.stroke();
 };
-var checkIfHitRightBlock = function () {
-    if ((((gameBall.x + gameBall.radius) >= rightBlock.x) && ((gameBall.x + gameBall.radius) <= (rightBlock.x + rightBlock.width)))
-        && ((gameBall.y + gameBall.radius) > rightBlock.y && (gameBall.y - gameBall.radius) < (rightBlock.y + 100))) {
+var checkIfHitgamePaddle = function () {
+    if ((((gameBall.x + gameBall.radius) >= gamePaddle.x) && ((gameBall.x + gameBall.radius) <= (gamePaddle.x + gamePaddle.width)))
+        && ((gameBall.y + gameBall.radius) > gamePaddle.y && (gameBall.y - gameBall.radius) < (gamePaddle.y + 100))) {
         return true;
     }
     else {
         return false;
     }
 };
-var checkIfHitWall = function () {
-    if (((gameBall.y - gameBall.radius) < 1) || ((gameBall.y + gameBall.radius) > gameBoard.height)) {
+var checkIfHitTopWall = function () {
+    if (((gameBall.y - gameBall.radius) < 1)) {
+        gamePaddle.incoming = true;
+        return true;
+    }
+    else {
+        return false;
+    }
+};
+var checkIfHitSideWalls = function () {
+    if (((gameBall.x - gameBall.radius) < 1) || ((gameBall.x + gameBall.radius) > gameBoard.width)) {
+        gamePaddle.incoming = true;
+        return true;
+    }
+    else {
+        return false;
+    }
+};
+var checkIfHitBottomWall = function () {
+    if ((gameBall.y + gameBall.radius) > gameBoard.height) {
         return true;
     }
     else {
@@ -102,9 +120,9 @@ var mouseDown = function (e) {
     var startY = parseInt(e.offsetY);
     console.log(startX, startY);
     console.log(e);
-    if (checkIfInBlock(startX, startY, rightBlock)) {
+    if (checkIfInBlock(startX, startY, gamePaddle)) {
         isDragging = true;
-        playerBlock = rightBlock;
+        playerBlock = gamePaddle;
     }
 };
 var mouseMove = function (e) {
@@ -117,17 +135,23 @@ var mouseMove = function (e) {
 gameBoard.onmousedown = mouseDown;
 gameBoard.onmousemove = mouseMove;
 var checkIfBounced = function () {
-    if (rightBlock.incoming && checkIfHitRightBlock()) {
-        if (gameBall.dx < 10) {
-            gameBall.dx += 0.1;
+    if (gamePaddle.incoming && checkIfHitgamePaddle()) {
+        if (gameBall.dy < 10) {
+            gameBall.dy += 0.1;
         }
-        gameBall.dx = -1 * gameBall.dx;
-        var dyChange = (rightBlock.y - gameBall.y) + (rightBlock.height / 2);
-        gameBall.dy = -1 * (dyChange / 25);
-        rightBlock.incoming = false;
-    }
-    else if (checkIfHitWall()) {
         gameBall.dy = -1 * gameBall.dy;
+        var dxChange = (gamePaddle.x - gameBall.x) + (gamePaddle.width / 2);
+        gameBall.dx = -1 * (dxChange / 25);
+        gamePaddle.incoming = false;
+    }
+    else if (checkIfHitTopWall()) {
+        gameBall.dy = -1 * gameBall.dy;
+    }
+    else if (checkIfHitSideWalls()) {
+        gameBall.dx = -1 * gameBall.dx;
+    }
+    else if (checkIfHitBottomWall()) {
+        reset(gameBall);
     }
 };
 var updateScore = function (side) {
@@ -137,25 +161,4 @@ var updateScore = function (side) {
     else if (side === 'right') {
         document.getElementById('right-player-score').innerText = scores.rightPlayerScore.toString();
     }
-};
-var checkIfScored = function () {
-    if ((gameBall.x - gameBall.radius) <= 0) {
-        scores.rightPlayerScore++;
-        updateScore('right');
-        gameBall.x = 250;
-        gameBall.dx = 2;
-        gameBall.dy = 0;
-        rightBlock.incoming = true;
-        return true;
-    }
-    else if ((gameBall.x + gameBall.radius) >= gameBoard.width) {
-        scores.leftPlayerScore++;
-        updateScore('left');
-        gameBall.x = 250;
-        gameBall.dx = -2;
-        gameBall.dy = 0;
-        rightBlock.incoming = false;
-        return true;
-    }
-    return false;
 };

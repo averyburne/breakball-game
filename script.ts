@@ -8,7 +8,6 @@ const boardBackground: string = 'white'
 const boardBorder: string = 'black'
 let isDragging: boolean = false
 let playerBlock
-let computerBlock
 // gameBoard.width = '10%'
 
 type Paddle = {
@@ -27,12 +26,19 @@ type Ball = {
     dx: number
 }
 
-let rightBlock: Paddle = {
+let gamePaddle: Paddle = {
     x: 350,
     y: 450,
     width: 100,
     height: 20,
     incoming: true
+}
+
+const reset = ball => {
+    ball.x = 250
+    ball.y = 100
+    ball.dy = 2
+    ball.dx = 0
 }
 
 let gameBall: Ball = {
@@ -60,11 +66,6 @@ function main(): void {
     setTimeout(() => {
         clearCanvas()
         checkIfBounced()
-        if(checkIfScored()) {
-            setTimeout(() => {
-                draw()
-            }, 3000)
-        }
         gameBall.x += gameBall.dx
         gameBall.y += gameBall.dy
         draw()
@@ -86,17 +87,17 @@ const draw = ():void => {
     gameBoardContext.fillStyle = 'lightblue'
     gameBoardContext.strokeStyle = 'darkblue'
    
-    gameBoardContext.fillRect(rightBlock.x, rightBlock.y, rightBlock.width, rightBlock.height)
-    gameBoardContext.strokeRect(rightBlock.x, rightBlock.y, rightBlock.width, rightBlock.height);
+    gameBoardContext.fillRect(gamePaddle.x, gamePaddle.y, gamePaddle.width, gamePaddle.height)
+    gameBoardContext.strokeRect(gamePaddle.x, gamePaddle.y, gamePaddle.width, gamePaddle.height);
     gameBoardContext.beginPath()
     gameBoardContext.arc(gameBall.x, gameBall.y, gameBall.radius, 0, 2 * Math.PI)
     gameBoardContext.stroke()
 }
 
-const checkIfHitRightBlock = (): boolean => {
+const checkIfHitgamePaddle = (): boolean => {
     if (
-        (((gameBall.x + gameBall.radius) >= rightBlock.x) && ((gameBall.x + gameBall.radius) <= (rightBlock.x + rightBlock.width)))
-        && ((gameBall.y + gameBall.radius) > rightBlock.y && (gameBall.y - gameBall.radius) < (rightBlock.y + 100))) {
+        (((gameBall.x + gameBall.radius) >= gamePaddle.x) && ((gameBall.x + gameBall.radius) <= (gamePaddle.x + gamePaddle.width)))
+        && ((gameBall.y + gameBall.radius) > gamePaddle.y && (gameBall.y - gameBall.radius) < (gamePaddle.y + 100))) {
             return true
         }
     else {
@@ -104,8 +105,26 @@ const checkIfHitRightBlock = (): boolean => {
     }
 }
 
-const checkIfHitWall = (): boolean => {
-    if (((gameBall.y - gameBall.radius) < 1) || ((gameBall.y + gameBall.radius) > gameBoard.height)) {
+const checkIfHitTopWall = (): boolean => {
+    if (((gameBall.y - gameBall.radius) < 1)) {
+        gamePaddle.incoming = true
+        return true
+    } else {
+        return false
+    }
+}
+
+const checkIfHitSideWalls = (): boolean => {
+    if (((gameBall.x - gameBall.radius) < 1) || ((gameBall.x + gameBall.radius) > gameBoard.width)) {
+        gamePaddle.incoming = true
+        return true
+    } else {
+        return false
+    }
+}
+
+const checkIfHitBottomWall = (): boolean => {
+    if ((gameBall.y + gameBall.radius) > gameBoard.height) {
         return true
     } else {
         return false
@@ -139,9 +158,9 @@ let mouseDown = function(e) {
     console.log(startX, startY)
     console.log(e)
 
-    if(checkIfInBlock(startX, startY, rightBlock)) {
+    if(checkIfInBlock(startX, startY, gamePaddle)) {
         isDragging = true
-        playerBlock = rightBlock
+        playerBlock = gamePaddle
     }
 }
 
@@ -157,16 +176,20 @@ gameBoard.onmousedown = mouseDown
 gameBoard.onmousemove = mouseMove
 
 const checkIfBounced = (): void => {
-    if (rightBlock.incoming && checkIfHitRightBlock()) {
-        if (gameBall.dx < 10) {
-            gameBall.dx += 0.1
+    if (gamePaddle.incoming && checkIfHitgamePaddle()) {
+        if (gameBall.dy < 10) {
+            gameBall.dy += 0.1
         }
-        gameBall.dx = -1*gameBall.dx
-        let dyChange = (rightBlock.y - gameBall.y) + (rightBlock.height/2)
-        gameBall.dy = -1*(dyChange/25)
-        rightBlock.incoming = false
-    } else if (checkIfHitWall()) {
         gameBall.dy = -1*gameBall.dy
+        let dxChange = (gamePaddle.x - gameBall.x) + (gamePaddle.width/2)
+        gameBall.dx = -1*(dxChange/25)
+        gamePaddle.incoming = false
+    } else if (checkIfHitTopWall()) {
+        gameBall.dy = -1*gameBall.dy
+    } else if (checkIfHitSideWalls()) {
+        gameBall.dx = -1*gameBall.dx
+    } else if (checkIfHitBottomWall()) {
+        reset(gameBall)
     }
 
 }
@@ -177,25 +200,4 @@ const updateScore = side => {
     } else if (side === 'right') {
         document.getElementById('right-player-score').innerText = scores.rightPlayerScore.toString()
     }
-}
-
-const checkIfScored = (): boolean => {
-    if ((gameBall.x - gameBall.radius) <= 0) {
-        scores.rightPlayerScore++
-        updateScore('right')
-        gameBall.x = 250
-        gameBall.dx = 2
-        gameBall.dy = 0
-        rightBlock.incoming = true
-        return true
-    } else if ((gameBall.x + gameBall.radius) >= gameBoard.width) {
-        scores.leftPlayerScore++
-        updateScore('left')
-        gameBall.x = 250
-        gameBall.dx = -2
-        gameBall.dy = 0
-        rightBlock.incoming = false
-        return true
-    }
-    return false
 }
