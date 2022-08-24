@@ -10,7 +10,7 @@ let isDragging: boolean = false
 let playerBlock
 // gameBoard.width = '10%'
 
-type Paddle = {
+type Block = {
     x: number,
     y: number,
     width: number,
@@ -26,7 +26,15 @@ type Ball = {
     dx: number
 }
 
-let gamePaddle: Paddle = {
+let block1: Block = {
+    x: 100,
+    y: 20,
+    width: 20,
+    height: 20,
+    incoming: true
+}
+
+let gamePaddle: Block = {
     x: 350,
     y: 450,
     width: 100,
@@ -66,6 +74,12 @@ function main(): void {
     setTimeout(() => {
         clearCanvas()
         checkIfBounced()
+        if (checkIfHitBlock(block1)) {
+            block1.height = 0
+            block1.width = 0
+            block1.x = 0
+            block1.y = 0
+        }
         gameBall.x += gameBall.dx
         gameBall.y += gameBall.dy
         draw()
@@ -89,6 +103,8 @@ const draw = ():void => {
    
     gameBoardContext.fillRect(gamePaddle.x, gamePaddle.y, gamePaddle.width, gamePaddle.height)
     gameBoardContext.strokeRect(gamePaddle.x, gamePaddle.y, gamePaddle.width, gamePaddle.height);
+    gameBoardContext.fillRect(block1.x, block1.y, block1.width, block1.height)
+    gameBoardContext.strokeRect(block1.x, block1.y, block1.width, block1.height);
     gameBoardContext.beginPath()
     gameBoardContext.arc(gameBall.x, gameBall.y, gameBall.radius, 0, 2 * Math.PI)
     gameBoardContext.stroke()
@@ -101,6 +117,15 @@ const checkIfHitgamePaddle = (): boolean => {
             return true
         }
     else {
+        return false
+    }
+}
+
+const checkIfHitBlock = (block: Block): boolean => {
+    console.log('hit')
+    if ((gameBall.x - gameBall.radius) <= (block.x + block.width) && (gameBall.x + gameBall.radius) >= block.x || (gameBall.y + gameBall.radius) >= (block.y + block.height) && (gameBall.y + gameBall.radius) >= block.y) {
+        return true
+    } else {
         return false
     }
 }

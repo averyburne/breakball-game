@@ -8,6 +8,13 @@ var boardBackground = 'white';
 var boardBorder = 'black';
 var isDragging = false;
 var playerBlock;
+var block1 = {
+    x: 100,
+    y: 20,
+    width: 20,
+    height: 20,
+    incoming: true
+};
 var gamePaddle = {
     x: 350,
     y: 450,
@@ -18,7 +25,7 @@ var gamePaddle = {
 var reset = function (ball) {
     ball.x = 250;
     ball.y = 100;
-    ball.dy = 10;
+    ball.dy = 2;
     ball.dx = 0;
 };
 var gameBall = {
@@ -40,6 +47,12 @@ function main() {
     setTimeout(function () {
         clearCanvas();
         checkIfBounced();
+        if (checkIfHitBlock(block1)) {
+            block1.height = 0;
+            block1.width = 0;
+            block1.x = 0;
+            block1.y = 0;
+        }
         gameBall.x += gameBall.dx;
         gameBall.y += gameBall.dy;
         draw();
@@ -60,6 +73,8 @@ var draw = function () {
     gameBoardContext.strokeStyle = 'darkblue';
     gameBoardContext.fillRect(gamePaddle.x, gamePaddle.y, gamePaddle.width, gamePaddle.height);
     gameBoardContext.strokeRect(gamePaddle.x, gamePaddle.y, gamePaddle.width, gamePaddle.height);
+    gameBoardContext.fillRect(block1.x, block1.y, block1.width, block1.height);
+    gameBoardContext.strokeRect(block1.x, block1.y, block1.width, block1.height);
     gameBoardContext.beginPath();
     gameBoardContext.arc(gameBall.x, gameBall.y, gameBall.radius, 0, 2 * Math.PI);
     gameBoardContext.stroke();
@@ -67,6 +82,15 @@ var draw = function () {
 var checkIfHitgamePaddle = function () {
     if ((((gameBall.x + gameBall.radius) >= gamePaddle.x) && ((gameBall.x + gameBall.radius) <= (gamePaddle.x + gamePaddle.width)))
         && ((gameBall.y + gameBall.radius) > gamePaddle.y && (gameBall.y - gameBall.radius) < (gamePaddle.y + 100))) {
+        return true;
+    }
+    else {
+        return false;
+    }
+};
+var checkIfHitBlock = function (block) {
+    console.log('hit');
+    if ((gameBall.x - gameBall.radius) <= (block.x + block.width) && (gameBall.x + gameBall.radius) >= block.x || (gameBall.y + gameBall.radius) >= (block.y + block.height) && (gameBall.y + gameBall.radius) >= block.y) {
         return true;
     }
     else {
