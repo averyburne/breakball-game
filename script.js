@@ -89,8 +89,8 @@ var checkIfHitgamePaddle = function () {
     }
 };
 var checkIfHitBlock = function (block) {
-    console.log('hit');
-    if ((gameBall.x - gameBall.radius) <= (block.x + block.width) && (gameBall.x + gameBall.radius) >= block.x || (gameBall.y + gameBall.radius) >= (block.y + block.height) && (gameBall.y + gameBall.radius) >= block.y) {
+    if ((gameBall.x - gameBall.radius) <= (block.x + block.width) && (gameBall.x + gameBall.radius) >= block.x && (gameBall.y + gameBall.radius) <= (block.y + block.height) && (gameBall.y + gameBall.radius) >= block.y) {
+        console.log('hit');
         return true;
     }
     else {
@@ -130,7 +130,6 @@ var checkIfInBlock = function (xClick, yClick, block) {
     var rightSideOfBock = block.x + block.width;
     var topSideOfBlock = block.y;
     var bottomSideOfBlock = block.y + block.height;
-    console.log(leftSideOfBlock, rightSideOfBock);
     if (xClick > leftSideOfBlock && xClick < rightSideOfBock && yClick > topSideOfBlock && yClick < bottomSideOfBlock) {
         return true;
     }
@@ -142,8 +141,6 @@ var mouseDown = function (e) {
     e.preventDefault();
     var startX = parseInt(e.offsetX);
     var startY = parseInt(e.offsetY);
-    console.log(startX, startY);
-    console.log(e);
     if (checkIfInBlock(startX, startY, gamePaddle)) {
         isDragging = true;
         playerBlock = gamePaddle;

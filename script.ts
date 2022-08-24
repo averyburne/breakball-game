@@ -122,8 +122,8 @@ const checkIfHitgamePaddle = (): boolean => {
 }
 
 const checkIfHitBlock = (block: Block): boolean => {
-    console.log('hit')
-    if ((gameBall.x - gameBall.radius) <= (block.x + block.width) && (gameBall.x + gameBall.radius) >= block.x || (gameBall.y + gameBall.radius) >= (block.y + block.height) && (gameBall.y + gameBall.radius) >= block.y) {
+    if ((gameBall.x - gameBall.radius) <= (block.x + block.width) && (gameBall.x + gameBall.radius) >= block.x && (gameBall.y + gameBall.radius) <= (block.y + block.height) && (gameBall.y + gameBall.radius) >= block.y) {
+        console.log('hit')
         return true
     } else {
         return false
@@ -166,8 +166,6 @@ let checkIfInBlock = (xClick, yClick, block) => {
     let topSideOfBlock = block.y
     let bottomSideOfBlock = block.y + block.height
 
-    console.log(leftSideOfBlock, rightSideOfBock)
-
     if (xClick > leftSideOfBlock && xClick < rightSideOfBock && yClick > topSideOfBlock && yClick < bottomSideOfBlock) {
         return true
     } else {
@@ -180,8 +178,6 @@ let mouseDown = function(e) {
 
     let startX = parseInt(e.offsetX)
     let startY = parseInt(e.offsetY)
-    console.log(startX, startY)
-    console.log(e)
 
     if(checkIfInBlock(startX, startY, gamePaddle)) {
         isDragging = true
