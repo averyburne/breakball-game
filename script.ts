@@ -179,6 +179,10 @@ let mouseDown = function(e) {
     let startX = parseInt(e.offsetX)
     let startY = parseInt(e.offsetY)
 
+    if (isDragging) {
+        isDragging = false
+    }
+
     if(checkIfInBlock(startX, startY, gamePaddle)) {
         isDragging = true
         playerBlock = gamePaddle
