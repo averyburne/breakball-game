@@ -56,6 +56,7 @@ function main() {
         gameBall.x += gameBall.dx;
         gameBall.y += gameBall.dy;
         draw();
+        drawBlocks();
         main();
     }, 10);
 }
@@ -78,6 +79,12 @@ var draw = function () {
     gameBoardContext.beginPath();
     gameBoardContext.arc(gameBall.x, gameBall.y, gameBall.radius, 0, 2 * Math.PI);
     gameBoardContext.stroke();
+};
+var drawBlocks = function () {
+    for (var i = 1; i < 10; i++) {
+        gameBoardContext.fillRect(i * 10, 50, 10, 10);
+        gameBoardContext.strokeRect(i * 10, 50, 10, 10);
+    }
 };
 var checkIfHitgamePaddle = function () {
     if ((((gameBall.x + gameBall.radius) >= gamePaddle.x) && ((gameBall.x + gameBall.radius) <= (gamePaddle.x + gamePaddle.width)))

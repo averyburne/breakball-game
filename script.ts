@@ -83,6 +83,7 @@ function main(): void {
         gameBall.x += gameBall.dx
         gameBall.y += gameBall.dy
         draw()
+        drawBlocks()
         main()
     }, 10)
 }
@@ -108,6 +109,13 @@ const draw = ():void => {
     gameBoardContext.beginPath()
     gameBoardContext.arc(gameBall.x, gameBall.y, gameBall.radius, 0, 2 * Math.PI)
     gameBoardContext.stroke()
+}
+
+const drawBlocks = ():void => {
+    for (let i = 1; i < 10; i++) {
+        gameBoardContext.fillRect(i*10, 50, 10, 10)
+        gameBoardContext.strokeRect(i*10, 50, 10, 10);
+    }
 }
 
 const checkIfHitgamePaddle = (): boolean => {
