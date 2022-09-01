@@ -56,7 +56,6 @@ function main() {
         gameBall.x += gameBall.dx;
         gameBall.y += gameBall.dy;
         draw();
-        drawBlocks();
         main();
     }, 10);
 }
@@ -82,8 +81,8 @@ var draw = function () {
 };
 var drawBlocks = function () {
     for (var i = 1; i < 10; i++) {
-        gameBoardContext.fillRect(i * 10, 50, 10, 10);
-        gameBoardContext.strokeRect(i * 10, 50, 10, 10);
+        gameBoardContext.fillRect(i * 10, 50, 100, 100);
+        gameBoardContext.strokeRect(i * 10, 50, 100, 100);
     }
 };
 var checkIfHitgamePaddle = function () {

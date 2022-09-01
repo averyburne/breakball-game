@@ -83,7 +83,6 @@ function main(): void {
         gameBall.x += gameBall.dx
         gameBall.y += gameBall.dy
         draw()
-        drawBlocks()
         main()
     }, 10)
 }
@@ -113,8 +112,8 @@ const draw = ():void => {
 
 const drawBlocks = ():void => {
     for (let i = 1; i < 10; i++) {
-        gameBoardContext.fillRect(i*10, 50, 10, 10)
-        gameBoardContext.strokeRect(i*10, 50, 10, 10);
+        gameBoardContext.fillRect(i*10, 50, 100, 100)
+        gameBoardContext.strokeRect(i*10, 50, 100, 100);
     }
 }
 
