@@ -83,6 +83,7 @@ function main(): void {
         gameBall.x += gameBall.dx
         gameBall.y += gameBall.dy
         draw()
+
         main()
     }, 10)
 }
@@ -95,6 +96,8 @@ const clearCanvas = (): void => {
     gameBoardContext.fillRect(0, 0, gameBoard.width, gameBoard.height);
     // Draw a "border" around the entire canvas
     gameBoardContext.strokeRect(0, 0, gameBoard.width, gameBoard.height);
+
+    drawBlocks()
 }
 
 const draw = ():void => {
@@ -112,8 +115,8 @@ const draw = ():void => {
 
 const drawBlocks = ():void => {
     for (let i = 1; i < 10; i++) {
-        gameBoardContext.fillRect(i*10, 50, 100, 100)
-        gameBoardContext.strokeRect(i*10, 50, 100, 100);
+        gameBoardContext.fillRect(i*20, 50, 20, 20)
+        gameBoardContext.strokeRect(i*20, 50, 20, 20);
     }
 }
 

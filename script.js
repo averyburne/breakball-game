@@ -67,6 +67,7 @@ var clearCanvas = function () {
     gameBoardContext.fillRect(0, 0, gameBoard.width, gameBoard.height);
     // Draw a "border" around the entire canvas
     gameBoardContext.strokeRect(0, 0, gameBoard.width, gameBoard.height);
+    drawBlocks();
 };
 var draw = function () {
     gameBoardContext.fillStyle = 'lightblue';
@@ -81,8 +82,8 @@ var draw = function () {
 };
 var drawBlocks = function () {
     for (var i = 1; i < 10; i++) {
-        gameBoardContext.fillRect(i * 10, 50, 100, 100);
-        gameBoardContext.strokeRect(i * 10, 50, 100, 100);
+        gameBoardContext.fillRect(i * 20, 50, 20, 20);
+        gameBoardContext.strokeRect(i * 20, 50, 20, 20);
     }
 };
 var checkIfHitgamePaddle = function () {
