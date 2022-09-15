@@ -49,6 +49,16 @@ const reset = ball => {
     ball.dx = 0
 }
 
+let blocks: Block[] = [
+    {
+        x: 100,
+        y: 20,
+        width: 20,
+        height: 20,
+        incoming: true
+    }
+]
+
 let hitBlocks = {
 
 }
