@@ -28,6 +28,23 @@ var reset = function (ball) {
     ball.dy = 2;
     ball.dx = 0;
 };
+var blocks = [
+    {
+        x: 100,
+        y: 20,
+        width: 20,
+        height: 20,
+        incoming: true
+    },
+    {
+        x: 120,
+        y: 20,
+        width: 20,
+        height: 20,
+        incoming: true
+    }
+];
+var hitBlocks = {};
 var gameBall = {
     x: 250,
     y: 100,
@@ -60,13 +77,13 @@ function main() {
     }, 10);
 }
 var clearCanvas = function () {
-    gameBoardContext.fillStyle = boardBackground;
-    //  Select the colour for the border of the canvas
-    gameBoardContext.strokestyle = boardBorder;
-    // Draw a "filled" rectangle to cover the entire canvas
-    gameBoardContext.fillRect(0, 0, gameBoard.width, gameBoard.height);
-    // Draw a "border" around the entire canvas
-    gameBoardContext.strokeRect(0, 0, gameBoard.width, gameBoard.height);
+    // gameBoardContext.fillStyle = boardBackground;
+    // //  Select the colour for the border of the canvas
+    // gameBoardContext.strokestyle = boardBorder;
+    // // Draw a "filled" rectangle to cover the entire canvas
+    // gameBoardContext.fillRect(0, 0, gameBoard.width, gameBoard.height);
+    // // Draw a "border" around the entire canvas
+    // gameBoardContext.strokeRect(0, 0, gameBoard.width, gameBoard.height);
     drawBlocks();
 };
 var draw = function () {
@@ -97,7 +114,7 @@ var checkIfHitgamePaddle = function () {
 };
 var checkIfHitBlock = function (block) {
     if ((gameBall.x - gameBall.radius) <= (block.x + block.width) && (gameBall.x + gameBall.radius) >= block.x && (gameBall.y + gameBall.radius) <= (block.y + block.height) && (gameBall.y + gameBall.radius) >= block.y) {
-        console.log('hit');
+        hitBlocks[block.x] = block.x;
         return true;
     }
     else {

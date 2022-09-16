@@ -56,6 +56,13 @@ let blocks: Block[] = [
         width: 20,
         height: 20,
         incoming: true
+    },
+    {
+        x: 120,
+        y: 20,
+        width: 20,
+        height: 20,
+        incoming: true
     }
 ]
 
